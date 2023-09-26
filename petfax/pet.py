@@ -1,25 +1,15 @@
-from flask import (Blueprint, render_template)
-import json
-
+from flask import ( Blueprint, render_template ) 
+import json 
 
 pets = json.load(open('pets.json'))
-print(pets)
 
-bp = Blueprint('pet', __name__, url_prefix='/pets')
+bp = Blueprint('pet', __name__, url_prefix="/pets")
 
-@bp.route('/<id>')
-def index(id):
-    if id:
-        print(id)
-        newpet = {}
-        for pet in pets:
-            if pet['pet_id'] == int(id):
-                newpet = pet
+@bp.route('/')
+def index(): 
+    return render_template('pets/index.html', pets=pets)
 
-        print(newpet)
-
-
-                
-        return render_template('showpet.html', pet=newpet)
-    else:    
-        return render_template('index.html', pets=pets)
+@bp.route('/<int:id>')
+def show(id): 
+    pet = pets[id - 1]
+    return render_template('pets/show.html', pet=pet)
